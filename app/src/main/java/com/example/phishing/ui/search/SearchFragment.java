@@ -29,7 +29,8 @@ import java.util.List;
 public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
-    private List<String> items = new ArrayList<>(Arrays.asList("텍스트1", "텍스트2"));
+    private List<String> items = new ArrayList<>(Arrays.asList("https://www.naver.com/", "https://www.youtube.com/",
+            "http://www.ewha.ac.kr/ewha/index.do", "https://github.com/"));
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -102,7 +103,7 @@ public class SearchFragment extends Fragment {
             if (item.toLowerCase().contains(query.toLowerCase())) {
                 sb.append(item);
                 if (i != items.size()-1) {
-                    sb.append("\n");
+                    sb.append("\n\n");
                 }
             }
         }
@@ -115,7 +116,7 @@ public class SearchFragment extends Fragment {
             String item = items.get(i);
             sb.append(item);
             if (i != items.size()-1) {
-                sb.append("\n");
+                sb.append("\n\n");
             }
         }
         return sb.toString();

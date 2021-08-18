@@ -1,5 +1,7 @@
 package com.example.phishing.ui.search;
 
+import android.content.ContentValues;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +16,30 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.phishing.R;
+import com.example.phishing.ui.RequestHttpURLConnection;
+import com.example.phishing.ui.add.AddFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
-    private List<String> items = Arrays.asList("텍스트1", "텍스트2");
+    private List<String> items = new ArrayList<>(Arrays.asList("텍스트1", "텍스트2"));
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         searchViewModel =
                 new ViewModelProvider(this).get(SearchViewModel.class);
         View root = inflater.inflate(R.layout.fragment_search, container, false);
+
+        String url = "http://127.0.0.1/searchUrl";
+        NetworkTask networkTask = new NetworkTask(url, null);
+        networkTask.execute();
 
         SearchView search = root.findViewById(R.id.search_view);
         TextView resultText = root.findViewById(R.id.search_text);
@@ -47,6 +59,40 @@ public class SearchFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private class NetworkTask extends AsyncTask<Integer, Void, String> {
+
+        private String url;
+        private ContentValues values;
+
+        public NetworkTask(String url, ContentValues values) {
+            this.url = url;
+            this.values = values;
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            String result;
+            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
+            result = requestHttpURLConnection.request(url, values);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
+            super.onPostExecute(json);
+
+            JSONObject jsonObject = null;
+
+            try {
+                jsonObject = new JSONObject(json);
+                String result = jsonObject.getString("url");
+                //items에 add
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private String search(String query) {

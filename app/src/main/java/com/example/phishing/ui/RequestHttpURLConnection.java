@@ -12,35 +12,23 @@ import java.net.URL;
 import java.util.Map;
 
 public class RequestHttpURLConnection {
-    public String request(String _url, ContentValues _params) {
+    public String request(String _url, String _param) {
         HttpURLConnection urlConn = null;
         StringBuffer params = new StringBuffer();
 
-        if (_params == null)
-            params.append("");
-        else {
+        if (_param != null) {
             //1개의 url 전송
-            for(Map.Entry<String, Object> parameter : _params.valueSet()) {
-                String key = parameter.getKey();
-                String value = parameter.getValue().toString();
-                params.append(key).append("=").append(value);
-            }
+            String value = _param;
+            _url = _url+"?url="+value;
         }
 
         try{
             URL url = new URL(_url);
             urlConn = (HttpURLConnection) url.openConnection();
 
-            urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+            urlConn.setRequestMethod("GET"); // URL 요청에 대한 메소드 설정 : GET.
             urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
             urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
-
-            String strParams = params.toString();
-
-            OutputStream os = urlConn.getOutputStream();
-            os.write(strParams.getBytes("UTF-8")); // 출력 스트림에 출력.
-            os.flush(); // 출력 스트림을 플러시(비운다)하고 버퍼링 된 모든 출력 바이트를 강제 실행.
-            os.close(); // 출력 스트림을 닫고 모든 시스템 자원을 해제.
 
             // 실패 시 null을 리턴하고 메서드를 종료.
             if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)

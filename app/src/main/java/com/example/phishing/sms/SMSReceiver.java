@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;

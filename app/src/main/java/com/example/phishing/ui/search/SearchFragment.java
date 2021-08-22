@@ -1,6 +1,5 @@
 package com.example.phishing.ui.search;
 
-import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,14 +9,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.phishing.R;
 import com.example.phishing.ui.RequestHttpURLConnection;
-import com.example.phishing.ui.add.AddFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;

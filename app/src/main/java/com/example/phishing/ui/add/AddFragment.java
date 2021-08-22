@@ -1,9 +1,7 @@
 package com.example.phishing.ui.add;
 
-import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +16,9 @@ import com.example.phishing.R;
 import com.example.phishing.ui.RequestHttpURLConnection;
 import com.google.android.material.textfield.TextInputEditText;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-
-import static android.content.ContentValues.TAG;
 
 public class AddFragment extends Fragment {
 

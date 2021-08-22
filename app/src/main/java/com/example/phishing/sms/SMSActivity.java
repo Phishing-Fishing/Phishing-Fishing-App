@@ -1,26 +1,14 @@
 package com.example.phishing.sms;
 
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import com.example.phishing.MainActivity;
 import com.example.phishing.R;
 import com.example.phishing.ui.RequestHttpURLConnection;
 

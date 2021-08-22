@@ -19,6 +19,7 @@ import com.example.phishing.R;
 import com.example.phishing.ui.RequestHttpURLConnection;
 import com.example.phishing.ui.add.AddFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,8 +30,8 @@ import java.util.List;
 public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
-    private List<String> items = new ArrayList<>(Arrays.asList("https://www.naver.com/", "https://www.youtube.com/",
-            "http://www.ewha.ac.kr/ewha/index.do", "https://github.com/"));
+    private TextView resultText;
+    private List<String> items = new ArrayList<>(Arrays.asList("Loading..."));
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,12 +39,12 @@ public class SearchFragment extends Fragment {
                 new ViewModelProvider(this).get(SearchViewModel.class);
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
-        String url = "http://127.0.0.1/searchUrl";
+        String url = "/api/phishing/database";
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
 
         SearchView search = root.findViewById(R.id.search_view);
-        TextView resultText = root.findViewById(R.id.search_text);
+        resultText = root.findViewById(R.id.search_text);
         resultText.setText(getResult());
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -65,9 +66,9 @@ public class SearchFragment extends Fragment {
     private class NetworkTask extends AsyncTask<Integer, Void, String> {
 
         private String url;
-        private ContentValues values;
+        private String values;
 
-        public NetworkTask(String url, ContentValues values) {
+        public NetworkTask(String url, String values) {
             this.url = url;
             this.values = values;
         }
@@ -88,8 +89,14 @@ public class SearchFragment extends Fragment {
 
             try {
                 jsonObject = new JSONObject(json);
-                String result = jsonObject.getString("url");
-                //items에 add
+                JSONArray jsonArray = jsonObject.getJSONArray("phishingList");
+
+                for (int i=0;i<jsonArray.length();i++) {
+                    JSONObject data = jsonArray.getJSONObject(i);
+                    items.add(data.getString("url"));
+                }
+
+                resultText.setText(getResult());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

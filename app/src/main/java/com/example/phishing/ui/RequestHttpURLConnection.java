@@ -11,21 +11,25 @@ import java.net.URL;
 public class RequestHttpURLConnection {
     public String request(String _url, String _param) {
         HttpURLConnection urlConn = null;
-        StringBuffer params = new StringBuffer();
-
-        if (_param != null) {
-            //1개의 url 전송
-            String value = _param;
-            _url = _url+"?url="+value;
-        }
 
         try{
             URL url = new URL(_url);
             urlConn = (HttpURLConnection) url.openConnection();
 
-            urlConn.setRequestMethod("GET"); // URL 요청에 대한 메소드 설정 : GET.
             urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
             urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;cahrset=UTF-8");
+
+            if (_param != null) {
+                urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+                String params = "{ \"url\" : \""+_param+"\" }";
+
+                OutputStream os = urlConn.getOutputStream();
+                os.write(params.getBytes("UTF-8"));
+                os.flush();
+                os.close();
+            } else {
+                urlConn.setRequestMethod("GET"); // URL 요청에 대한 메소드 설정 : GET.
+            }
 
             // 실패 시 null을 리턴하고 메서드를 종료.
             if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)

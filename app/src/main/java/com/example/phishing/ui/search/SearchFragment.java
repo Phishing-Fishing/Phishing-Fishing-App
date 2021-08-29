@@ -2,6 +2,7 @@ package com.example.phishing.ui.search;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
     private TextView resultText;
-    private List<String> items = new ArrayList<>(Arrays.asList("Loading..."));
+    private List<String> items = new ArrayList<>(Arrays.asList());
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,13 +38,13 @@ public class SearchFragment extends Fragment {
                 new ViewModelProvider(this).get(SearchViewModel.class);
         View root = inflater.inflate(R.layout.fragment_search, container, false);
 
-        String url = "/api/phishing/database";
+        String url = "https://phishing-fishing.herokuapp.com/api/phishing/database";
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
 
         SearchView search = root.findViewById(R.id.search_view);
         resultText = root.findViewById(R.id.search_text);
-        resultText.setText(getResult());
+        resultText.setText("Loading...");
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -81,11 +84,11 @@ public class SearchFragment extends Fragment {
         protected void onPostExecute(String json) {
             super.onPostExecute(json);
 
-            JSONObject jsonObject = null;
+            JSONArray jsonArray = null;
 
             try {
-                jsonObject = new JSONObject(json);
-                JSONArray jsonArray = jsonObject.getJSONArray("phishingList");
+                jsonArray = new JSONArray(json);
+                Log.d(TAG, jsonArray.toString());
 
                 for (int i=0;i<jsonArray.length();i++) {
                     JSONObject data = jsonArray.getJSONObject(i);

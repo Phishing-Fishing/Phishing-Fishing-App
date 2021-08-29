@@ -2,6 +2,7 @@ package com.example.phishing.ui.home;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,12 @@ import com.example.phishing.ui.RequestHttpURLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static android.content.ContentValues.TAG;
+
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private TextView url_count;
-    private int num = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        String url = "/api/phishing/count";
+        String url = "https://phishing-fishing.herokuapp.com/api/phishing/count";
         NetworkTask networkTask = new NetworkTask(url, null);
         networkTask.execute();
 
@@ -65,7 +67,8 @@ public class HomeFragment extends Fragment {
 
             try {
                 jsonObject = new JSONObject(json);
-                num = jsonObject.getInt("count");
+                Log.d(TAG, jsonObject.toString());
+                int num = jsonObject.getInt("count");
                 url_count.setText("총 "+num+" 개");
             } catch (JSONException e) {
                 e.printStackTrace();

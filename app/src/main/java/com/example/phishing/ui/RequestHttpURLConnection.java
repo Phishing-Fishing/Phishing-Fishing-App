@@ -1,5 +1,7 @@
 package com.example.phishing.ui;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,6 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static android.content.ContentValues.TAG;
 
 public class RequestHttpURLConnection {
     public String request(String _url, String _param) {
@@ -21,8 +25,10 @@ public class RequestHttpURLConnection {
 
             if (_param != null) {
                 urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+                urlConn.setRequestProperty("Content-Type","application/json");
                 String params = "{ \"url\" : \""+_param+"\" }";
 
+                Log.d(TAG, "request : "+params);
                 OutputStream os = urlConn.getOutputStream();
                 os.write(params.getBytes("UTF-8"));
                 os.flush();
@@ -31,9 +37,7 @@ public class RequestHttpURLConnection {
                 urlConn.setRequestMethod("GET"); // URL 요청에 대한 메소드 설정 : GET.
             }
 
-            // 실패 시 null을 리턴하고 메서드를 종료.
-            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
-                return null;
+            Log.d(TAG, "response : "+urlConn.getResponseCode());
 
             // 요청한 URL의 출력물을 BufferedReader로 받는다.
             BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream(), "UTF-8"));

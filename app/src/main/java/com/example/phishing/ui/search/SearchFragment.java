@@ -110,6 +110,8 @@ public class SearchFragment extends Fragment {
                 sb.append(item);
                 if (i != items.size()-1) {
                     sb.append("\n\n");
+                } else {
+                    sb.append("\n");
                 }
             }
         }
@@ -123,6 +125,8 @@ public class SearchFragment extends Fragment {
             sb.append(item);
             if (i != items.size()-1) {
                 sb.append("\n\n");
+            } else {
+                sb.append("\n");
             }
         }
         return sb.toString();

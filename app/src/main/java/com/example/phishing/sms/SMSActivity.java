@@ -27,8 +27,6 @@ public class SMSActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms);
         setTitle("Phishing fishing");
 
-        Log.d(TAG, "In SMS Activity");
-
         Intent passedIntent = getIntent();
         processIntent(passedIntent);
     }
@@ -36,7 +34,7 @@ public class SMSActivity extends AppCompatActivity {
     private void processIntent(Intent intent){
         if(intent != null){
             getUrl = intent.getStringExtra("url");
-            String url = "/api";
+            String url = "https://phishing-fishing.herokuapp.com/api/phishing";
 
             NetworkTask networkTask = new NetworkTask(url, getUrl);
             networkTask.execute();
@@ -77,11 +75,13 @@ public class SMSActivity extends AppCompatActivity {
 
             try {
                 jsonObject = new JSONObject(json);
+                Log.d(TAG, "Response in SMS : "+jsonObject.toString());
+
                 int result = jsonObject.getInt("phishing");
                 if (result == 1) {
-                    builder.setTitle("Phishing fishing에 의해 해당 URL은 악성 URL로 판별되었습니다.").setMessage(getUrl);
+                    builder.setTitle("해당 URL은 악성 URL로 의심됩니다.").setMessage(getUrl);
                 } else {
-                    builder.setTitle("Phishing fishing에 의해 해당 URL은 악성 URL이 아닌 것으로 판별되었습니다.").setMessage(getUrl);
+                    builder.setTitle("해당 URL은 악성 URL이 아닌 것으로 판별되었습니다.").setMessage(getUrl);
                 }
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
